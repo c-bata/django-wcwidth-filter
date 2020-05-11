@@ -1,6 +1,5 @@
 from django.template import Library
 from django.template.defaultfilters import stringfilter
-from django.utils.text import Truncator
 from wcwidth import wcswidth as func_wcswidth
 from wcwidth import wcwidth as func_wcwidth
 
@@ -20,19 +19,16 @@ def truncate_wcswidth(value, arg):
 
     truncated = False
     sum_width, chars = 0, 0
-    ellipsis_width = func_wcwidth("…")
-    last = len(value) - 1
+    last_index = len(value) - 1
     for i, char in enumerate(value):
         sum_width += func_wcwidth(char)
 
-        if i == last and sum_width == width:
+        if i == last_index and sum_width == width:
             break
-
-        if sum_width + ellipsis_width > width:
+        elif sum_width >= width:
             truncated = True
             break
         chars += 1
-
     return value[:chars] + "…" if truncated else value
 
 
