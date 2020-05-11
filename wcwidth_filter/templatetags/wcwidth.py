@@ -18,13 +18,22 @@ def truncate_wcswidth(value, arg):
     if not isinstance(value, str):
         return ""  # Fail silently.
 
-    max_chars, chars, sum_width = len(value), 0, 0
-    for char in value:
+    truncated = False
+    sum_width, chars = 0, 0
+    ellipsis_width = func_wcwidth("…")
+    last = len(value) - 1
+    for i, char in enumerate(value):
         sum_width += func_wcwidth(char)
-        if sum_width >= width and chars != max_chars - 1:
+
+        if i == last and sum_width == width:
+            break
+
+        if sum_width + ellipsis_width > width:
+            truncated = True
             break
         chars += 1
-    return Truncator(value).chars(chars)
+
+    return value[:chars] + "…" if truncated else value
 
 
 @register.filter(is_safe=False)
