@@ -9,7 +9,7 @@ Installation
 
 .. code-block:: console
 
-   $ python3 -m pip install djangohttpbench
+   $ python3 -m pip install django-wcwidth-filter
 
 Usage
 -----
@@ -30,3 +30,21 @@ wcswidth filter
    >>> })
    >>> template.render(context)
    10
+
+truncate_wcswidth filter
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   >>> template = Template("{% load wcwidth %}{{ x | truncate_wcswidth:4 }}")
+   >>> context = Context({
+   >>>     "x": "Hello",
+   >>> })
+   >>> template.render(context)
+   "Hel…"
+   >>> template = Template("{% load wcwidth %}{{ x | truncate_wcswidth:9 }}")
+   >>> context = Context({
+   >>>     "x": "こんにちは",
+   >>> })
+   >>> template.render(context)
+   'こんにち…'
